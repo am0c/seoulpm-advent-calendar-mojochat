@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<style type"text/css">
+			#chatWindow {
+				width : 500px;
+				height : 400px;
+				overFlow : auto;
+				border : 1px solid #000;
+			}
+		</style>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.min.js">
+		</script>
+		<script type="text/javascript">
+			var ws;
+
+			$(document).ready(function() {
+				$('#sendBtn').click(sendMessage); 
+
+				$('#sendBtn').keyup(function(ev) {
+					if( ev.keycode == 13) {
+						sendMessage();
+					}
+				});
+
+				$('#disconnBtn').click(disconn);
+
+				$('form').submit(function(ev) {
+					ev.preventDefault();
+				});
+
+				if(!("WebSocket" in window)) {
+					alert("do not Supprot WebSocket!!");
+				} else {
+					ws = new WebSocket('ws://localhost:3000/chatWS');
+
+					ws.onopen = function() {
+					}
+
+					ws.onmessage = function(ev) {
+						appendChat(ev.data);	
+					}
+
+					ws.onclose = function() {
+						appendChat("Connection Closed!");
+					}
+				}
+					
+				function sendMessage() {
+					ws.send($('#sendMes').val());
+					$('#sendMes').val("");
+				}
+				
+				function appendChat(mes) {
+					$('#chatWindow').append(mes+"<br>");
+				}
+
+				function disconn() {
+					ws.close();
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<%= content %>
+	</body>
+</html>

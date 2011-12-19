@@ -1,0 +1,11 @@
+%layout 'chatLayout';
+%title 'Chatting';
+<h1>
+	<%= $message %>
+</h1>
+<div id="chatWindow">
+</div>
+<form>
+	<input type="text" id="sendMes">
+	<input type="submit" id="sendBtn" value="Send">
+</form>
